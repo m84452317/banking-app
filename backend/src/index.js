@@ -4,6 +4,7 @@ import { expressMiddleware } from "@as-integrations/express5"; // Import from th
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import accountRoutes from "./routes/accountRoutes.js"; //  Import the account routes
+import loanRoutes from './routes/loanRoutes.js';
 // import cors from "cors";
 import { typeDefs, resolvers } from "./graphql/schema.js";
 import { authMiddleware } from './middleware/auth.js'
@@ -41,6 +42,7 @@ const startServer = async () => {
   // ***** End of temporary test route code *****
  // Integrate the account REST API routes
     app.use("/api/accounts", accountRoutes);
+    app.use('/api/loans', loanRoutes);
 
   // Use expressMiddleware to integrate Apollo Server with Express
   app.use(
