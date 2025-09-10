@@ -5,6 +5,7 @@ import {
   getLoanDetails,
   updateLoanStatus,
   getRepaymentSchedule,
+  payLoanInstallment
 } from "../controllers/loanController.js";
 import {authMiddleware} from "../middleware/auth.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
@@ -16,5 +17,7 @@ router.get("/myloans", authMiddleware, getMyLoans); // Corrected endpoint for se
 router.get("/:id", authMiddleware, getLoanDetails);
 router.patch("/:id/status", authMiddleware, adminMiddleware, updateLoanStatus);
 router.get("/:id/repayments", authMiddleware, getRepaymentSchedule);
+// Add this new route
+router.post("/:id/pay", authMiddleware, payLoanInstallment);
 
 export default router;
