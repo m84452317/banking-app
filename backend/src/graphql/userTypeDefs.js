@@ -5,6 +5,7 @@ export const userTypeDefs = gql`
     id: ID!
     name: String!
     email: String!
+     role: String!
     createdAt: String!
   }
 
@@ -17,6 +18,7 @@ export const userTypeDefs = gql`
     name: String!
     email: String!
     password: String!
+        role: String     
   }
 
   input UpdateUserInput {
@@ -31,7 +33,7 @@ export const userTypeDefs = gql`
   }
 
   extend type Mutation {
-    createUser(input: CreateUserInput!): User
+     createUser(input: CreateUserInput!): AuthPayload
     updateUser(id: ID!, input: UpdateUserInput!): User
     deleteUser(id: ID!): Boolean
     login(email: String!, password: String!): AuthPayload

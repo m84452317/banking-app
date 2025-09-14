@@ -57,17 +57,7 @@ export const getLoanDetails = async (req, res) => {
 // @desc Admin updates loan status (approve/reject/close)
 // @access Private (Admin only)
 export const updateLoanStatus = async (req, res) => {
-  /* try {
-    const { status } = req.body;
-    const loan = await Loan.findByIdAndUpdate(req.params.id, { status }, { new: true });
-    if (!loan) {
-      return res.status(404).json({ message: "Loan not found." });
-    }
-    res.json(loan);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  } */
-
+  
       // Start a transaction session for atomicity
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -192,3 +182,46 @@ export const payLoanInstallment = async (req, res) => {
     res.status(500).json({ error: "Failed to process payment: " + error.message });
   }
 };
+
+export const getAllPendingLoans = async (req, res) => {
+console.log('get pending loans hitting or not')
+  console.log(`req.user =  ${req.user}    req.user.role=== ${req.user.role}`);
+  
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Access denied. Admins only." });
+    }
+
+    // Use lean() to avoid Mongoose document overhead
+    // and optional populate (won't fail if user missing)
+    const pendingLoans = await Loan.find({ status: "pending" })
+      .populate({ path: 'userId', select: 'name email', options: { lean: true } })
+      .lean();
+
+    res.json(pendingLoans);
+  } catch (error) {
+    console.error("Error fetching pending loans:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/* // @route GET /api/loans/pending
+// @desc Get all pending loans (Admin only)
+// @access Private (Admin only)
+export const getAllPendingLoans = async (req, res) => {
+
+  try {
+    // Ensure only admin can access
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Access denied. Admins only." });
+    }
+
+    // Fetch all loans with status "pending"
+    const pendingLoans = await Loan.find({ status: "pending" }).populate('userId', 'name email');
+
+    res.json(pendingLoans);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+ */

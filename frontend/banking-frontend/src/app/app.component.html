@@ -1,3 +1,22 @@
-<h1 class="text-3xl font-bold text-blue-600">
-    Banking App Frontend (Angular + Tailwind)
-  </h1>
+<header class="bg-gray-800 text-white p-4">
+      <nav class="container mx-auto flex justify-between items-center">
+        <a routerLink="/dashboard" class="text-xl font-bold">Banking App</a>
+        <div class="flex items-center space-x-4">
+          <a *ngIf="user$ | async" routerLink="/dashboard" routerLinkActive="font-bold">Dashboard</a>
+          <a *ngIf="user$ | async" routerLink="/accounts" routerLinkActive="font-bold">Accounts</a>
+          <a *ngIf="user$ | async" routerLink="/loans" routerLinkActive="font-bold">Loans</a>
+          <a *ngIf="(user$ | async)?.role === 'admin'" routerLink="/admin/loans" routerLinkActive="font-bold">Admin Loans</a>
+          <div *ngIf="user$ | async">
+            <span class="text-sm">Welcome, {{ (user$ | async)?.name }}</span>
+            <button (click)="onLogout()" class="ml-4 bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded-md text-sm">Logout</button>
+          </div>
+          <div *ngIf="!(user$ | async)">
+            <a routerLink="/login" routerLinkActive="font-bold" class="mr-2">Login</a>
+            <a routerLink="/signup" routerLinkActive="font-bold">Sign Up</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="min-h-screen">
+      <router-outlet></router-outlet>
+    </main>

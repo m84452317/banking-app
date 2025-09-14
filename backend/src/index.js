@@ -5,16 +5,21 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import accountRoutes from "./routes/accountRoutes.js"; //  Import the account routes
 import loanRoutes from './routes/loanRoutes.js';
-// import cors from "cors";
+import cors from "cors";
 import { typeDefs, resolvers } from "./graphql/schema.js";
 import { authMiddleware } from './middleware/auth.js'
 // Load env variables
 dotenv.config();
 
 const app = express();
+  // Configure CORS to allow your frontend's origin
+  app.use(cors({
+    origin: 'http://localhost:4200'
+  }));
 
 // Global middleware to parse JSON bodies for all routes
 app.use(express.json());
+console.log(`index js file...`);
 
 const server = new ApolloServer({
   typeDefs,
